@@ -23,7 +23,7 @@ Ensure that boost::graph v.1.55 or higher is installed:
 $ cd PATH/TO/MD/build
 $ cmake ..
 $ make  
-or (for four kernels) $ make -j 4  
+or (for four cores) $ make -j 4  
 
 
 ### Usage
