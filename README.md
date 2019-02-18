@@ -7,7 +7,7 @@ Permutations. Discrete Mathematics and Theoretical Computer Science, DMTCS, 2002
 pp.55-70.
 
 
-Copyright (C) 2015 Adrian Fritz, 2018 Fynn Leitow (only done some minor bugfixes)
+Copyright (C) 2015 Adrian Fritz, 2019 Fynn Leitow (only done some minor bugfixes)
 
 This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or any later version.
 
@@ -20,18 +20,29 @@ You should have received a copy of the GNU General Public License along with thi
 
 Ensure that boost::graph v.1.55 or higher is installed:
 
+```bash
 $ cd PATH/TO/MD/build
 $ cmake ..
-$ make  
-or (for four cores) $ make -j 4  
+$ make
+# or (e.g. for 4 cores):
+$ make -j 4
+```
+
+
 
 
 ### Usage
 
+```bash
 $ ./mod_dec -your_graph_as_string > out.dot
+```
 
 convert to PNG via:
 
+```bash
 $ dot -Tpng out.dot -o out.png
+```
 
-Because I used this inside a Java-Project, the format of the graph is the same as a .toString() - call on a Graph in the JGraphT - Library. An example can be found at the bottom of the modDecopm.cpp - file. Feel free to use it directly on a boost::graph or implement your own parser.
+Because I used this inside a Java-Project, the format of the graph is the same as a `.toString()` - call on a Graph in the JGraphT- Library. An example can be found at the bottom of the `modDecopm.cpp` - file. Feel free to use it directly on a boost::graph or implement your own parser.
+
+Adrian's original code didn't just distinguish between _Series_, _Parallel_ and _Order_, but it also recognised _Spider_-Modules. If you need them, remove the related comments in `calculateModuleType` and around `checkThickSpider` and `checkThinSpider`.

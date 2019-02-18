@@ -483,13 +483,15 @@ void calculateModuleType(const Graph& graph, SubGraph& tmp, const TVertex& v, co
   Tree repGraph; // The representative graph, relevant for prime nodes
   int out_d = -1;
   bool foundChild = false;
-  unsigned int max_degree = fractureTree[v].containedNodes.size(); // in a spider the head and legs have to be real children
-  std::vector<unsigned int> degrees(max_degree,0); // store degrees for spider recognition (initialise all degrees with 0)
+  // uncomment for spider recognition!
+  // unsigned int max_degree = fractureTree[v].containedNodes.size(); // in a spider the head and legs have to be real children
+  // std::vector<unsigned int> degrees(max_degree,0); // store degrees for spider recognition (initialise all degrees with 0)
+  
   svertex_iter si, si_end;
   for (boost::tie(si, si_end) = boost::vertices(tmp); si != si_end; ++si)
   {
     Vertex t = tmp.local_to_global(*si); // we need the global name for searching in the fractureTree
-    degrees[boost::degree(*si,tmp)]++; // degree sequence
+    // degrees[boost::degree(*si,tmp)]++; // degree sequence; uncomment for spider recognition!
     std::vector<Vertex>::iterator child = std::find(fractureTree[v].children.begin(), fractureTree[v].children.end(),t);
     if (child != fractureTree[v].children.end()) // This means, we are a "real" child of the module
     {
