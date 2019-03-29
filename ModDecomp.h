@@ -15,7 +15,6 @@
 #include <boost/graph/graph_utility.hpp>
 #include <boost/graph/copy.hpp>
 #include <boost/graph/connected_components.hpp>
-#include <boost/algorithm/string.hpp>
 #include "DyckWord.h"
 
 struct vertex_prop {
@@ -33,18 +32,16 @@ struct vertex_prop {
 
 class ModDecomp {
 public:
-  Graph readFromString(std::string inFile, bool directed);
   Tree decompose(Graph& g);
   Tree decompose_components(Graph& g);
   Tree calcModDecomp(const std::vector<Vertex>& factorization, Graph& graph);
   std::vector<Vertex> calcFacPerm(const Graph& graph);
-  //stepwise?
+  //stepwise? 
 private:
   DyckWord parenthesizing(const std::vector<Vertex>& fac, const Graph& graph, std::map<Vertex, int>& lcutters, std::map<Vertex, int>& rcutters);
-  Tree buildFractureTree(const DyckWord& dyck, Graph& g, const std::map<Vertex, int>& lcutters, const std::map<Vertex, int>& rcutters);
-  void moduleDetDelMerge(); //Detect modules, delete dummies, merge modules [one step?]
-  bool deleteWeakOrderAndDummies(Tree& fractureTree);
-  void buildModDecomp(const Graph& graph, const std::vector<Vertex>& fac, const std::map<Vertex, int>& lcutters, const std::map<Vertex, int>& rcutters, Tree& fractureTree); // merging moved to here
+  Tree buildFractureTree(const DyckWord& dyck, Graph& g, const std::map<Vertex, int>& lcutters, const std::map<Vertex, int>& rcutters); 
+  void moduleDetDelMerge(); //Detect modules, delete dummies, merge modules [one step?]  
+  void buildModDecomp(const Graph& graph, const std::vector<Vertex>& fac, const std::map<Vertex, int>& lcutters, const std::map<Vertex, int>& rcutters, Tree& fractureTree); // merging moved to here  
 };
 
 #endif //MODDECOMP_H
