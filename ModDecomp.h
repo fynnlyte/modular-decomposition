@@ -34,6 +34,7 @@ struct vertex_prop {
 class ModDecomp {
 public:
   Graph readFromString(std::string inFile, bool directed);
+  Graph readFromStringDimacs(const std::string& input, bool directed);
   Tree decompose(Graph& g);
   Tree decompose_components(Graph& g);
   Tree calcModDecomp(const std::vector<Vertex>& factorization, Graph& graph);
