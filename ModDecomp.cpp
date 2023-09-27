@@ -1323,7 +1323,6 @@ Graph ModDecomp::readFromStringDimacs(const std::string& input, bool directed){
 }
 
 Graph ModDecomp::readFromFileDimacs(const std::string& filepath, bool directed){
-    std::cout << filepath;
     std::ifstream file(filepath);
     if(!file.is_open()) {
         std::cerr << "Could not open file: " << filepath << std::endl;
