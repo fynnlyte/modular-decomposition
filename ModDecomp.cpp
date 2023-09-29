@@ -1284,6 +1284,59 @@ Graph ModDecomp::readFromString(std::string inFile, bool directed){
 
 }
 
+Graph ModDecomp::readFromStringDimacs(const std::string& input, bool directed){
+    std::istringstream iss(input);
+    std::string line;
+    Graph g;
+    bool firstLine = true;
+    unsigned vertices = 0;
+    unsigned edges = 0;
+
+    while (std::getline(iss, line)) {
+        if (firstLine) { 
+            std::istringstream lineStream(line);
+            std::string descriptor;
+            lineStream >> descriptor; 
+            lineStream >> descriptor; 
+            lineStream >> vertices;
+            lineStream >> edges; 
+
+            for (unsigned i = 1; i <= vertices; ++i) {
+                boost::add_vertex(g);
+            }
+
+            firstLine = false;
+        } else { 
+            std::istringstream lineStream(line);
+            unsigned v1, v2;
+            lineStream >> v1 >> v2; 
+
+            // assuming in vertices start from 1 in the input file
+            v1--;
+            v2--;
+
+            boost::add_edge(v1, v2, g);
+        }
+    }
+
+    return g;
+}
+
+Graph ModDecomp::readFromFileDimacs(const std::string& filepath, bool directed){
+    std::ifstream file(filepath);
+    if(!file.is_open()) {
+        std::cerr << "Could not open file: " << filepath << std::endl;
+        return Graph();
+    }
+
+    std::ostringstream ss;
+    ss << file.rdbuf(); 
+    std::string content = ss.str();
+    file.close();
+
+    return readFromStringDimacs(content, directed); 
+}
+
 int main(int argc, char* argv[])
 {
   // boost::add_edge(0,1,0,g);
@@ -1319,14 +1372,26 @@ int main(int argc, char* argv[])
 	if(argc == 1){
 		// no further arguments: just do the example code
 		std::string test("([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23], [{0,2}, {0,3}, {0,4}, {0,5}, {0,6}, {0,7}, {0,8}, {0,9}, {0,10}, {0,11}, {0,13}, {0,14}, {0,18}, {0,19}, {0,20}, {0,21}, {0,22}, {0,23}, {1,2}, {1,3}, {1,4}, {1,5}, {1,6}, {1,7}, {1,8}, {1,9}, {1,10}, {1,11}, {1,13}, {1,18}, {1,19}, {1,20}, {1,21}, {1,22}, {1,23}, {2,18}, {3,4}, {5,3}, {5,4}, {6,9}, {6,10}, {6,11}, {6,13}, {6,14}, {7,9}, {7,10}, {7,11}, {7,13}, {7,14}, {8,9}, {8,10}, {8,11}, {8,13}, {8,14}, {9,10}, {9,11}, {9,13}, {9,14}, {10,11}, {10,13}, {10,14}, {11,13}, {11,14}, {12,0}, {12,2}, {12,3}, {12,4}, {12,5}, {12,6}, {12,7}, {12,8}, {12,9}, {12,10}, {12,11}, {12,13}, {12,14}, {12,18}, {12,19}, {12,20}, {12,21}, {12,22}, {12,23}, {13,14}, {15,0}, {15,1}, {15,2}, {15,3}, {15,4}, {15,5}, {15,6}, {15,7}, {15,8}, {15,9}, {15,10}, {15,11}, {15,12}, {15,13}, {15,14}, {15,16}, {15,17}, {15,18}, {15,19}, {15,20}, {15,21}, {15,22}, {15,23}, {16,0}, {16,1}, {16,2}, {16,3}, {16,4}, {16,5}, {16,6}, {16,7}, {16,8}, {16,9}, {16,10}, {16,11}, {16,12}, {16,13}, {16,14}, {16,17}, {16,18}, {16,19}, {16,20}, {16,21}, {16,22}, {16,23}, {17,2}, {17,3}, {17,4}, {17,5}, {17,6}, {17,7}, {17,8}, {17,9}, {17,10}, {17,11}, {17,13}, {17,14}, {17,18}, {17,19}, {17,20}, {17,21}, {17,22}, {17,23}, {18,3}, {18,4}, {18,5}, {18,6}, {18,7}, {18,8}, {18,9}, {18,10}, {18,11}, {18,13}, {18,14}, {18,19}, {18,20}, {18,21}, {18,22}, {18,23}, {19,2}, {19,3}, {19,4}, {19,5}, {19,6}, {19,7}, {19,8}, {19,9}, {19,10}, {19,11}, {19,13}, {19,14}, {19,20}, {19,21}, {19,22}, {19,23}, {22,10}, {22,14}])");
-		Graph g = md.readFromString(test, false);
+    Graph g = md.readFromString(test, false);
+
+    // uncomment if want to to test on DIMACS
+    // std::string test("p tww 4 4\n1 2\n1 3\n2 4\n3 4");
+		// Graph g = md.readFromStringDimacs(test, false);
 		Tree md_tree = md.decompose(g);
 		printTree(md_tree);
 
 	} else if( argc == 2){
 		// compute md for that string (Undirected)
-		Graph g = md.readFromString(argv[1],false);
+		// Graph g = md.readFromString(argv[1],false);
+
+    // uncomment if want to use DIMACS string
+		// Graph g = md.readFromStringDimacs(test, false);
+
+    // uncomment if want too use DIMACS file
+    std::string arg(argv[1]);
+    Graph g = md.readFromFileDimacs(arg, false);
 		Tree md_tree = md.decompose(g);
+
 		printTree(md_tree);
 
 	}

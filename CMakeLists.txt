@@ -1,6 +1,6 @@
 project(MD)
 
-cmake_minimum_required(VERSION 2.8 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.22 FATAL_ERROR)
 
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
